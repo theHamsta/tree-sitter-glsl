@@ -300,6 +300,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "array_type_specifier",
+        "named": true
+      },
+      {
         "type": "enum_specifier",
         "named": true
       },
@@ -545,6 +549,29 @@
       "types": [
         {
           "type": "type_qualifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "array_type_specifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "primitive_type",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
           "named": true
         }
       ]
@@ -908,6 +935,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "array_type_specifier",
+            "named": true
+          },
           {
             "type": "expression",
             "named": true
@@ -1333,6 +1364,10 @@
         },
         {
           "type": "type_qualifier",
+          "named": true
+        },
+        {
+          "type": "type_specifier",
           "named": true
         }
       ]

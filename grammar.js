@@ -5,10 +5,26 @@ module.exports = grammar(C, {
 
     conflicts: ($, original) => original.concat([
         [$.function_definition, $.declaration],
-        [$.declaration]
+        [$.declaration],
+        [$.expression, $.array_type_specifier],
+        [$.type_specifier, $.array_type_specifier],
+        [$.type_specifier, $.expression, $.array_type_specifier],
+        [$._declarator, $.type_specifier, $.array_type_specifier],
+        [$.declaration, $.type_qualifier],
+        [$.parameter_declaration, $.type_qualifier]
     ]),
 
     rules: {
+        type_specifier: ($, original) => choice(original, $.array_type_specifier),
+        array_type_specifier: $ => prec.right(seq(
+            choice($.primitive_type, $._type_identifier),
+            repeat1(seq('[', optional($.expression), ']')),
+        )),
+        call_expression: ($, original) => choice(original, prec(18, seq(
+            field('function', choice(alias($.primitive_type, $.identifier), $.array_type_specifier)),
+            field('arguments', $.argument_list),
+        ))),
+        type_qualifier: ($, original) => choice(original, 'highp', 'mediump', 'lowp'),
         _top_level_item: ($, original) => choice(
             ...original.members.filter((member) => member.content?.name != '_old_style_function_definition'),
             $.preproc_extension,
@@ -42,7 +58,10 @@ module.exports = grammar(C, {
         extension_behavior: $ => choice("require", "enable", "warn", "disable"),
 
         declaration: ($, original) =>
-            choice(seq(choice("invariant", "precise"), $.identifier, ";"), seq(
+            choice(
+                seq('precision', choice('highp', 'mediump', 'lowp', $.identifier), $.type_specifier, ';'),
+                seq($.layout_specification, choice('in', 'out', 'uniform', 'buffer'), ';'),
+                seq(choice("invariant", "precise"), $.identifier, ";"), seq(
                 repeat(
                     choice(
                         'in',
@@ -53,13 +72,9 @@ module.exports = grammar(C, {
                         'attribute',
                         'varying',
                         'buffer',
-                        'coherent',
+                        'coherent', 'restrict',
                         'readonly',
                         'writeonly',
-                        'precision',
-                        'highp',
-                        'mediump',
-                        'lowp',
                         'subroutine',
                         'centroid',
                         'sample',
@@ -89,13 +104,9 @@ module.exports = grammar(C, {
                     'attribute',
                     'varying',
                     'buffer',
-                    'coherent',
+                    'coherent', 'restrict',
                     'readonly',
                     'writeonly',
-                    'precision',
-                    'highp',
-                    'mediump',
-                    'lowp',
                     'subroutine',
                     'centroid',
                     'sample',
@@ -121,7 +132,7 @@ module.exports = grammar(C, {
                         'attribute',
                         'varying',
                         'buffer',
-                        'coherent',
+                        'coherent', 'restrict',
                         'readonly',
                         'writeonly',
                         'centroid',
