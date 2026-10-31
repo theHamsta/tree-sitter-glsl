@@ -42,7 +42,10 @@ module.exports = grammar(C, {
         extension_behavior: $ => choice("require", "enable", "warn", "disable"),
 
         declaration: ($, original) =>
-            choice(seq(choice("invariant", "precise"), $.identifier, ";"), seq(
+            choice(seq(choice("invariant", "precise"), $.identifier, ";"),
+                // A declaration made only of qualifiers, e.g. `layout(local_size_x = 64) in;`
+                seq(repeat1(choice('in', 'out', 'uniform', 'buffer', 'shared', $.layout_specification)), ";"),
+                seq(
                 repeat(
                     choice(
                         'in',

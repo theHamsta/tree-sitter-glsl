@@ -2969,6 +2969,47 @@
           "type": "SEQ",
           "members": [
             {
+              "type": "REPEAT1",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "in"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "out"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "uniform"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "buffer"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "shared"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "layout_specification"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
               "type": "REPEAT",
               "content": {
                 "type": "CHOICE",
